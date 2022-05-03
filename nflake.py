@@ -10,23 +10,30 @@ from mpmath import tan, pi, sin, cos, radians
 # on how to move, where to go, and when/what to draw. By giving precise instructions to the 
 # turtle based on algorithms, we can draw the n-flake.
 
-# |-- TURTLE MODULE INITIATION --|
-tur = turtle.Turtle()
-
-tur.screen.setup(1000, 1000)
-
-tur.speed(0)
-tur.hideturtle()
-
 # |-- USER INPUT --|
 sides = int(input('How many sides should the n-flake have? (note: high values take a while to render!) '))
 iterations = int(input('How many iterations should be processed?: '))
-draw = ''
-
+save=''
 while True:
-    draw = input('Show the drawing process? (y/n)')
-    if draw:
+    save = input('save the image? [y/n]')
+    if save=='y' or save=='n':
         break
+
+draw = ''
+while True:
+    draw = input('Show the drawing process? (not recommended for high # of iterations/sides) [y/n]: ')
+    if draw =='y' or draw=='n':
+        break
+
+# |-- TURTLE MODULE INITIATION --|
+tur = turtle.Turtle()
+
+screenwidth = 1000
+screenheight = 1000
+tur.screen.setup(screenwidth, screenheight)
+
+tur.speed(0)
+tur.hideturtle()
 
 # |-- MAIN N-FLAKE FUNCTION --|
 def ngon(t, sides, length, factor, iterations):
@@ -51,12 +58,12 @@ def ngon(t, sides, length, factor, iterations):
 # |-- SET PARAMETERS --|
 tur.penup()
 
-length = 300 # set side length of polygon
+length = (screenwidth - 150) * (2*(sin(radians(90/sides)))) # set side length of polygon
 
 rad = length / (2 * sin(radians(180/sides)))    # calculate length of radius of polygon (center to circumcircle)
 apot = length / (2 * tan(radians(180/sides)))   # calculate length of apothem (center to midpoint of side)
 
-tur.sety(-(rad + apot) / 2)  # set turtle's y position on the canvas to half its height
+tur.sety(-(apot + rad) / 2)  # set turtle's y position on the canvas to half its height
 tur.setx(length / 2)         # set turtle's x position on the canvas to half its side width
 '''
 The following formula was found on https://en.wikipedia.org/wiki/N-flake#In_two_dimensions.
@@ -68,13 +75,20 @@ factor = 2 * (1 + sum(cos((2 * pi * i)/sides) for i in range(1, int(sides/4) + 1
 
 
 # |-- BEGIN DRAWING --|
+
 tur.pendown()
 
 if draw == 'n':             # if user doesn't want to see the drawing process
     turtle.tracer(0, 0)     # stop the screen from updating
-
+turtle.tracer(0,0)
 ngon(tur, sides, length, factor, iterations) # call function to draw fractal
 
 turtle.tracer(1, 1)         # final step
+
+if save == 'y':
+    ts = tur.getscreen()
+    ts.getcanvas().postscript(file='fractal.ps')
+
+
 turtle.mainloop()           # draw updates to canvas
 turtle.update()             # display fractal
