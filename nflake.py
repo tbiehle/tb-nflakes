@@ -1,6 +1,7 @@
 from turtle import *
 
 import turtle
+from PIL import Image
 from mpmath import tan, pi, sin, cos, radians
 # important for scale factor calculations
 
@@ -80,7 +81,6 @@ tur.pendown()
 
 if draw == 'n':             # if user doesn't want to see the drawing process
     turtle.tracer(0, 0)     # stop the screen from updating
-turtle.tracer(0,0)
 ngon(tur, sides, length, factor, iterations) # call function to draw fractal
 
 turtle.tracer(1, 1)         # final step
