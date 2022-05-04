@@ -1,7 +1,6 @@
 from turtle import *
 
 import turtle
-from PIL import Image
 from mpmath import tan, pi, sin, cos, radians
 # important for scale factor calculations
 
